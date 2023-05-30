@@ -1,16 +1,21 @@
 import Image from 'next/image'
 import '@/styles/globals.css'
 import dynamic from 'next/dynamic';
+import { Suspense, lazy } from "react";
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useMemo } from 'react'
 
+let MyPlot = lazy(() => import("../components/plot"));
 
 export default function Home() {
 
-  const Graph = dynamic(() => import('../libs/DrawGraph'), {
-    ssr: false
+  const Graph = dynamic(
+    () => import('../libs/DrawGraph'),
+    {
+      ssr: false,
+      loading: () => <p>Loading...</p>,
   });
   const Inputdata = dynamic(() => import('../components/Inputdata'), {
     ssr: false
@@ -64,7 +69,10 @@ export default function Home() {
           height={37}
           priority
         />
-      </div>
+        </div>
+        <Suspense fallback={<p>LOADING</p>}>
+          <MyPlot />
+        </Suspense>
       <Graph />
       <Inputdata />
       <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
