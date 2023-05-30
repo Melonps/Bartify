@@ -1,9 +1,30 @@
 import Image from 'next/image'
 import '@/styles/globals.css'
-import Graph from '@/libs/DrawGraph'
+import dynamic from 'next/dynamic';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { useMemo } from 'react'
+
+import Inputdata from '@/components/Inputdata'
 
 export default function Home() {
+  const Graph = dynamic(() => import('../libs/DrawGraph'), {
+    ssr: false
+  });
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: prefersDarkMode ? 'dark' : 'light',
+        },
+      }),
+    [prefersDarkMode],
+  );
+
   return (
+    <ThemeProvider theme={theme}>
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
         <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
@@ -41,6 +62,7 @@ export default function Home() {
         />
       </div>
       <Graph />
+      <Inputdata />
       <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
         <a
           href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
@@ -59,6 +81,7 @@ export default function Home() {
           </p>
         </a>
       </div>
-    </main>
+      </main>
+      </ThemeProvider>
   )
 }

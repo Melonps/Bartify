@@ -5,12 +5,24 @@ import { Layout, PlotData } from "plotly.js";
 type Props = {}
 
 const Graph: React.FC<Props> = () => {
+    var xValue = ['Product A', 'Product B', 'Product C'];
+    var yValue = [20, 14, 23];
 
     const data1:Partial<PlotData> = {
         type: 'bar',
-        x: ['giraffes', 'orangutans', 'monkeys'],
-        y: [20, 14, 23],
+        x: xValue,
+        y: yValue,
         name: 'SF Zoo',
+        text: yValue.map(String),
+        textposition: 'auto',
+        marker: {
+            color: 'rgb(158,202,225)',
+            opacity: 0.6,
+            line: {
+            color: 'rgb(8,48,107)',
+            width: 1.5
+            }
+        }
     }
     const layout1:Partial<Layout> = { title: '３次元グラフ'};
     // 下にある<Plot data = {}> のdataの型は Partial<PlotData>[]
