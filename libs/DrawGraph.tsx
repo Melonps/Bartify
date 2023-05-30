@@ -1,6 +1,6 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
-import Plotly from 'plotly.js-dist-min'
+import {Layout, PlotData} from "plotly.js";
 
 type Props = {}
 
