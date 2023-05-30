@@ -1,17 +1,21 @@
 import Image from 'next/image'
 import '@/styles/globals.css'
 import dynamic from 'next/dynamic';
-import CssBaseline from '@mui/material/CssBaseline';
+
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useMemo } from 'react'
 
-import Inputdata from '@/components/Inputdata'
 
 export default function Home() {
+
   const Graph = dynamic(() => import('../libs/DrawGraph'), {
     ssr: false
   });
+  const Inputdata = dynamic(() => import('../components/Inputdata'), {
+    ssr: false
+  });
+
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
   const theme = useMemo(
     () =>

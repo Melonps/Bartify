@@ -1,36 +1,51 @@
 import React from 'react';
-import Box from '@mui/material/Box';
+import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import TextField from '@mui/material/TextField';
-import { useTable } from "react-table";
+import {
+    ColumnDef,
+    flexRender,
+    getCoreRowModel,
+    useReactTable,
+} from "@tanstack/react-table";
 
-const columns = [
-  { Header: "商品", accessor: "product" },
-  { Header: "値段", accessor: "price" },
-  { Header: "在庫", accessor: "stock" }
+
+type Book = {
+    title: string;
+    author: string;
+};
+
+const books: Book[] = [
+    {
+        title: 'ハリー・ポッターと賢者の石',
+        author: 'J.K.ローリング',
+    },
+    {
+        title: 'こころ',
+        author: '夏目漱石',
+    },
 ];
 
-const data = [
-  { product: "りんご", price: "120円", stock: "130" },
-  { product: "バナナ", price: "100円", stock: "200" },
-  { product: "メロン", price: "3400円", stock: "2" },
-  { product: "ぶどう", price: "1200円", stock: "6" }
+const columns: ColumnDef<Book, any>[] = [
+    {
+        accessorKey: 'title',
+        header: 'タイトル',
+    },
+    {
+        accessorKey: 'author',
+        header: '著者',
+    },
 ];
+
 
 const Inputdata = () => {
 
-    const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        rows,
-        prepareRow
-    } = useTable({
+    const table = useReactTable<Book>({
+        data: books,
         columns,
-        data
+        getCoreRowModel: getCoreRowModel(),
     });
 
     return (
-        <Box>
             <div>
                 <TextField
                 id="filled-read-only-input"
@@ -41,38 +56,34 @@ const Inputdata = () => {
                 }}
                 variant="filled"
                 />
-            </div>
-            <table {...getTableProps()}>
-                <thead>
-                    {headerGroups.map((headerGroup) => (
-                        <tr {...headerGroup.getHeaderGroupProps()}>
-                            {headerGroup.headers.map((column) => (
-                            <th {...column.getHeaderProps()}>
-                                {   column.render("Header")}
-                            </th>
-                            ))}
-                        </tr>
+
+            <TableContainer>
+                <Table>
+                    <Thead>
+                    {table.getHeaderGroups().map((headerGroup) => (
+                        <Tr key={headerGroup.id}>
+                        {headerGroup.headers.map((header) => (
+                            <Th key={header.id}>
+                            {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                            </Th>
+                        ))}
+                        </Tr>
                     ))}
-                </thead>
-                <tbody {...getTableBodyProps()}>
-                    {rows.map((row, i) => {
-                        prepareRow(row);
-                        return (
-                            <tr {...row.getRowProps()}>
-                            {row.cells.map((cell) => {
-                            return (
-                                <td {...cell.getCellProps()}>
-                                    {cell.render("Cell")}
-                                </td>
-                            )
-                            })}
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
-        </Box>
-        
+                    </Thead>
+                    <Tbody>
+                    {table.getRowModel().rows.map((row) => (
+                        <Tr key={row.id}>
+                        {row.getVisibleCells().map((cell) => (
+                            <Td key={cell.id} borderX="1px solid #e2e8f0">
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                            </Td>
+                        ))}
+                        </Tr>
+                    ))}
+                    </Tbody>
+                </Table>
+        </TableContainer>
+        </div>
     );
 }
 
