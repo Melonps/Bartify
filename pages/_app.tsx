@@ -1,13 +1,12 @@
 import Image from 'next/image'
 import '@/styles/globals.css'
 import dynamic from 'next/dynamic';
-import { Suspense, lazy } from "react";
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useMemo } from 'react'
 
-let MyPlot = lazy(() => import("../components/plot"));
+
 
 export default function Home() {
 
@@ -70,9 +69,6 @@ export default function Home() {
           priority
         />
         </div>
-        <Suspense fallback={<p>LOADING</p>}>
-          <MyPlot />
-        </Suspense>
       <Graph />
       <Inputdata />
       <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
